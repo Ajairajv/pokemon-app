@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import TypeFilter from './TypeFilter';
@@ -13,17 +12,28 @@ const extractIdFromUrl = (url) => {
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState(''); // State to store the selected type
+  const [selectedType, setSelectedType] = useState('');
+  const [types, setTypes] = useState([]); // State to store the available types
   const handleSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
   };
 
   const handleTypeFilter = (type) => {
-    console.log('Filtering by type:', type);
     setSelectedType(type);
   };
 
-  const types = ['Grass', 'Fire', 'Water'];
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await axios.get('https://pokeapi.co/api/v2/type');
+        setTypes(response.data.results.map((type) => type.name));
+      } catch (error) {
+        console.error('Error fetching Pokemon types:', error);
+      }
+    };
+
+    fetchTypes();
+  }, []);
 
   const [pokemon, setPokemon] = useState([]);
   const [currentPageUrl, setCurrentPageUrl] = useState('https://pokeapi.co/api/v2/pokemon');
@@ -59,7 +69,6 @@ const Home = () => {
     setCurrentPageUrl(prevPageUrl);
   }
 
-  // Filter Pokémon by search term and selected type
   const filteredPokemon = pokemon.filter((p) => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     const lowerCaseType = selectedType.toLowerCase();
@@ -73,22 +82,26 @@ const Home = () => {
   if (loading) return 'Loading...';
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r ">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r">
       <SearchBar onSearch={handleSearch} />
       <TypeFilter types={types} onFilterChange={handleTypeFilter} />
-
-      <div className="d-flex justify-content-center mt-5">
+      <div className="container mx-auto mt-5">
+      {/* Container for Pokemon cards */}
+      <div className="flex flex-wrap justify-around">
         <PokemonList pokemon={filteredPokemon} />
       </div>
 
-      <button className="space-between">
-        <Pagination gotoNextPage={nextPageUrl ? gotoNextPage : null} gotoPrevPage={prevPageUrl ? gotoPrevPage : null} />
-      </button>
+      {/* Container for Pagination buttons */}
+      <div className="flex justify-between mt-4 p-2">
+        <Pagination className="order-1" gotoPrevPage={prevPageUrl ? gotoPrevPage : null} />
+        <Pagination className="order-2" gotoNextPage={nextPageUrl ? gotoNextPage : null} />
+      </div>
+    </div>
+
     </div>
   );
 };
 
 export default Home;
-
 
 

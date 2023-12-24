@@ -3,7 +3,7 @@ import React from 'react';
 
 const TypeFilter = ({ types, onFilterChange }) => {
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex flex-auto justify-between w-small">
       <select
         className="select select-primary w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-2"
         id="type"
