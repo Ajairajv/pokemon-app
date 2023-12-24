@@ -1,10 +1,10 @@
-
+// import { NavLink} from "react-router-dom";
+import Home from './pages/Home'
 
 function App() {
   return (
     <div>
-      <h1 className="font-bold">hello world</h1>
-   
+     <Home/>
     </div>
   );
 }
