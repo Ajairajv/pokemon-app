@@ -15,6 +15,12 @@ const PokemonCard = ({ id, name, type }) => {
         setPokemonDetails({
           id: response.data.id,
           type: response.data.types[0]?.type.name || 'Unknown',
+          speed: response.data.stats.find((stat) => stat.stat.name === 'speed').base_stat,
+          specialDefense: response.data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
+          specialAttack: response.data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
+          defense: response.data.stats.find((stat) => stat.stat.name === 'defense').base_stat,
+          attack: response.data.stats.find((stat) => stat.stat.name === 'attack').base_stat,
+          hp: response.data.stats.find((stat) => stat.stat.name === 'hp').base_stat,
           // Add more properties as needed
         });
         setLoading(false);
@@ -24,6 +30,12 @@ const PokemonCard = ({ id, name, type }) => {
           setPokemonDetails({
             id: 'N/A',
             type: 'Unknown',
+            speed: 'N/A',
+            specialDefense: 'N/A',
+            specialAttack: 'N/A',
+            defense: 'N/A',
+            attack: 'N/A',
+            hp: 'N/A',
           });
         } else {
           setPokemonDetails(null);
@@ -63,12 +75,12 @@ const PokemonCard = ({ id, name, type }) => {
         <div className="flex items-end justify-between">
           {/* Move the "Show More" button to the bottom-left */}
           <button
-          className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs" // Adjusted padding and font size
-          onClick={handleMoreClick}
-          style={{ alignSelf: 'flex-end' }} // Align to the bottom-left
-        >
-          Show More
-        </button>
+            className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs" // Adjusted padding and font size
+            onClick={handleMoreClick}
+            style={{ alignSelf: 'flex-end' }} // Align to the bottom-left
+          >
+            Show More
+          </button>
           {/* Display the Pokemon image */}
           <img
             src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails?.id}.svg`}
@@ -84,13 +96,18 @@ const PokemonCard = ({ id, name, type }) => {
           id={pokemonDetails.id}
           name={name}
           type={pokemonDetails.type}
-          types={pokemonDetails.types}
+          speed={pokemonDetails.speed}
+          specialDefense={pokemonDetails.specialDefense}
+          specialAttack={pokemonDetails.specialAttack}
+          defense={pokemonDetails.defense}
+          attack={pokemonDetails.attack}
+          hp={pokemonDetails.hp}
           handleCloseDetails={handleCloseDetails}
         />
       )}
     </div>
   );
-  
 };
 
 export default PokemonCard;
+
