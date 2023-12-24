@@ -47,18 +47,17 @@ const PokemonCard = ({ id, name, type }) => {
     setShowDetails(false);
   };
 
-  if (loading) return "Loading...";
+  if (loading) return 'Loading...';
 
   return (
     <div className="bg-white rounded p-4 mb-4 shadow-md" style={{ minWidth: '200px' }}>
-      {/* Render Pokemon details from the local state */}
       <img
         src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails.id}.svg`}
         alt={name}
         className="mx-auto mb-2"
         style={{ maxWidth: '100px' }}
       />
-      <p className="text-lg font-bold">{name}</p>
+      <p className="text-lg font-bold text-blue-500">{name}</p>
       <p className="text-gray-500">ID: {pokemonDetails.id}</p>
       <p className="text-gray-500">Type: {pokemonDetails.type}</p>
       <button
@@ -71,7 +70,6 @@ const PokemonCard = ({ id, name, type }) => {
       {showDetails && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
           <div className="bg-white p-4 rounded">
-            {/* Render Pokemon details from the local state */}
             <img
               src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails.id}.svg`}
               alt={name}
@@ -79,7 +77,7 @@ const PokemonCard = ({ id, name, type }) => {
               style={{ maxWidth: '100px' }}
             />
             <div className="ml-4">
-              <p className="text-lg font-bold">{name}</p>
+              <p className="text-lg font-bold text-blue-500">{name}</p>
               <p className="text-gray-500">ID: {pokemonDetails.id}</p>
               <p className="text-gray-500">Type: {pokemonDetails.type}</p>
               {/* Add more Pokemon details as needed */}

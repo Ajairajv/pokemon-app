@@ -1,7 +1,7 @@
 // src/components/TypeFilter.js
 import React from 'react';
 
-const TypeFilter = ({ onFilterChange, types }) => {
+const TypeFilter = ({ types, onFilterChange }) => {
   return (
     <div className="flex items-center justify-center w-full">
       <select
