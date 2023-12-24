@@ -48,42 +48,49 @@ const PokemonCard = ({ id, name, type }) => {
   if (loading) return 'Loading...';
 
   return (
-    <div className="bg-white rounded-md p-4 mb-4 shadow-md max-w-xs mx-auto" style={{ width: '200px', height: '200px' }}>
-    <div className="flex flex-col h-full justify-between">
-      <div>
-        <p className="text-lg font-bold text-blue-500">{name}</p>
-        <p className="text-gray-500">Type: {pokemonDetails?.type}</p>
-      </div>
-      <div className="flex items-end justify-between">
+    <div className="bg-white rounded-md p-4 mb-4 shadow-md max-w-xs mx-auto relative" style={{ width: '230px', height: '200px' }}>
+      <div className="flex flex-col h-full justify-between">
         <div>
-          <p className="text-sm text-gray-500">#00{id}</p>
+          <div className="flex items-center justify-between mb-2">
+            {/* Display the name of the Pokemon */}
+            <p className="text-lg font-bold text-blue-500">{name}</p>
+            {/* Display the ID to the right of the name */}
+            <p className="text-sm text-gray-500 ml-2">#00{id}</p>
+          </div>
+          {/* Display the Type of the Pokemon */}
+          <p className="text-gray-500">Type: {pokemonDetails?.type}</p>
         </div>
-        <img
-          src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails?.id}.svg`}
-          alt={name}
-          className="mb-2"
-          style={{ width: '80px', height: '80px' }} // Fixed size for the image
-        />
+        <div className="flex items-end justify-between">
+          {/* Move the "Show More" button to the bottom-left */}
+          <button
+          className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs" // Adjusted padding and font size
+          onClick={handleMoreClick}
+          style={{ alignSelf: 'flex-end' }} // Align to the bottom-left
+        >
+          Show More
+        </button>
+          {/* Display the Pokemon image */}
+          <img
+            src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails?.id}.svg`}
+            alt={name}
+            className="mb-2"
+            style={{ width: '80px', height: '80px' }} // Fixed size for the image
+          />
+        </div>
       </div>
+      {/* Display the Pokemon Details Modal if showDetails is true */}
+      {showDetails && (
+        <PokemonDetailsModal
+          id={pokemonDetails.id}
+          name={name}
+          type={pokemonDetails.type}
+          types={pokemonDetails.types}
+          handleCloseDetails={handleCloseDetails}
+        />
+      )}
     </div>
-    <button
-      className="bg-blue-500 text-white px-4 py-2 rounded mt-2 self-start hover:bg-blue-600 transition"
-      onClick={handleMoreClick}
-    >
-      Show More
-    </button>
-    {showDetails && (
-      <PokemonDetailsModal
-        id={pokemonDetails.id}
-        name={name}
-        type={pokemonDetails.type}
-        types={pokemonDetails.types}
-        handleCloseDetails={handleCloseDetails}
-      />
-    )}
-  </div>
-  
   );
+  
 };
 
 export default PokemonCard;

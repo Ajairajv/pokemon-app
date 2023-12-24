@@ -2,8 +2,8 @@ import React from 'react';
 
 const PokemonDetailsModal = ({ id, name, type, types, speed, specialDefense, specialAttack, handleCloseDetails }) => {
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center">
-      <div className="bg-white p-4 rounded w-[80%] flex flex-col">
+    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"> {/* Increased z-index to 50 */}
+      <div className="bg-white p-4 rounded w-[80%] flex flex-col relative z-50"> {/* Increased z-index to 50 */}
         <div className="flex justify-between items-center mb-4">
           <div>
             <img
