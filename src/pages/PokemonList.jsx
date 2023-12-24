@@ -1,11 +1,15 @@
-import React from 'react'
+// PokemonList.js
+import React from 'react';
+import PokemonCard from './PokemonCard';
 
-export default function PokemonList({pokemon}) {
+const PokemonList = ({ pokemon }) => {
   return (
-    <div>
-        {pokemon.map(p=>(
-            <div key={p}>{p}</div>
-        ))}
+    <div className="flex flex-wrap justify-between">
+      {pokemon.map(({ name, id, type }) => (
+        <PokemonCard key={name} id={id} name={name} type={type} />
+      ))}
     </div>
-  )
-}
+  );
+};
+
+export default PokemonList;

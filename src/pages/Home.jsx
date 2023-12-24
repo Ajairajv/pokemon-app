@@ -1,92 +1,87 @@
 // src/pages/Home.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import TypeFilter from './TypeFilter';
-import PokemonCard from './PokemonCard';
 import PokemonList from './PokemonList';
-import { useState ,useEffect} from 'react';
 import axios from 'axios';
 import Pagination from './Pagination';
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (searchTerm) => {
-    // Implement your search logic here
-    console.log('Searching for:', searchTerm);
+    setSearchTerm(searchTerm);
   };
 
   const handleTypeFilter = (selectedType) => {
-    // Implement your type filter logic here
     console.log('Filtering by type:', selectedType);
   };
 
-  // Replace with your actual list of Pokemon types
   const types = ['Grass', 'Fire', 'Water'];
 
-  const [pokemon, setPokemon] = useState([])
-  const [currentPageUrl, setCurrentPageUrl] = useState("https://pokeapi.co/api/v2/pokemon")
-  const [nextPageUrl, setNextPageUrl] = useState()
-  const [prevPageUrl, setPrevPageUrl] = useState()
-  const [loading, setLoading] = useState(true)
+  const [pokemon, setPokemon] = useState([]);
+  const [currentPageUrl, setCurrentPageUrl] = useState("https://pokeapi.co/api/v2/pokemon");
+  const [nextPageUrl, setNextPageUrl] = useState();
+  const [prevPageUrl, setPrevPageUrl] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const extractIdFromUrl = (url) => {
+    const parts = url.split('/');
+    return parts[parts.length - 2];
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(currentPageUrl, {
-          cancelToken: new axios.CancelToken(c => (cancel = c))
-        });
+        const response = await axios.get(currentPageUrl);
         setLoading(false);
         setNextPageUrl(response.data.next);
         setPrevPageUrl(response.data.previous);
-        setPokemon(response.data.results.map(p => p.name));
+        setPokemon(response.data.results.map(p => ({
+          name: p.name,
+          id: extractIdFromUrl(p.url),
+          type: 'Unknown'
+        })));
       } catch (error) {
-        if (axios.isCancel(error)) {
-          // Request was canceled
-        } else {
-          // Handle other errors
-        }
+        console.error('Error fetching Pokemon:', error);
+        setLoading(false);
       }
     };
-  
-    let cancel;
+
     fetchData();
-  
-    return () => cancel();
   }, [currentPageUrl]);
+
   function gotoNextPage() {
-    setCurrentPageUrl(nextPageUrl)
+    setCurrentPageUrl(nextPageUrl);
   }
 
   function gotoPrevPage() {
-    setCurrentPageUrl(prevPageUrl)
+    setCurrentPageUrl(prevPageUrl);
   }
 
-  if (loading) return "Loading..."
-  
+  if (loading) return "Loading...";
 
+  const filteredPokemon = pokemon.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r ">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r">
       <SearchBar onSearch={handleSearch} />
       <TypeFilter onFilterChange={handleTypeFilter} types={types} />
-     
 
-      {/* Your list of Pokemon  goes here */}
-      <PokemonList pokemon={pokemon}/>
+      <div className='flex flex flex-start justify-content'>
+        <PokemonList pokemon={filteredPokemon} />
+      </div>
 
-      
-      {/* Your other content goes here */}
-      <PokemonCard/>
-
-
-      {/* prev and next button */}
-      <Pagination
-        gotoNextPage={nextPageUrl ? gotoNextPage : null}
-        gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
-      />
+      <button className='space-between'>
+        <Pagination
+          gotoNextPage={nextPageUrl ? gotoNextPage : null}
+          gotoPrevPage={prevPageUrl ? gotoPrevPage : null}
+        />
+      </button>
     </div>
   );
 };
 
 export default Home;
-
