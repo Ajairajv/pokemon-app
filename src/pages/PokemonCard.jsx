@@ -2,8 +2,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PokemonDetailsModal from './PokemonDetailsModal';
+import TypeList from './TypeList';
 
-const PokemonCard = ({ id, name, type }) => {
+// Define a mapping of types to colors
+const typeColors = {
+  normal: '#BABAAE',
+  fighting: '#A75543',
+  flying: '#78A2FF',
+  poison: '#A95CA0',
+  ground: '#EECC55',
+  rock: '#CCBD72',
+  bug: '#C2D21E',
+  ghost: '#7975D7',
+  steel: '#C4C2DB',
+  fire: '#FA5643',
+  water: '#56ADFF',
+  grass: '#8CD750',
+  electric: '#FDE139',
+  psychic: '#FA65B4',
+  ice: '#96F1FF',
+  dragon: '#8673FF',
+  dark: '#8D6855',
+  fairy: '#F9AEFF',
+  // Add more types as needed
+};
+
+const PokemonCard = ({ id, name }) => {
   const [pokemonDetails, setPokemonDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -12,34 +36,20 @@ const PokemonCard = ({ id, name, type }) => {
       try {
         setLoading(true);
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const types = response.data.types.map((type) => type.type.name);
         setPokemonDetails({
           id: response.data.id,
-          type: response.data.types[0]?.type.name || 'Unknown',
+          types: types.length > 0 ? types : ['Unknown'],
           speed: response.data.stats.find((stat) => stat.stat.name === 'speed').base_stat,
           specialDefense: response.data.stats.find((stat) => stat.stat.name === 'special-defense').base_stat,
           specialAttack: response.data.stats.find((stat) => stat.stat.name === 'special-attack').base_stat,
           defense: response.data.stats.find((stat) => stat.stat.name === 'defense').base_stat,
           attack: response.data.stats.find((stat) => stat.stat.name === 'attack').base_stat,
           hp: response.data.stats.find((stat) => stat.stat.name === 'hp').base_stat,
-          // Add more properties as needed
         });
         setLoading(false);
       } catch (error) {
         console.error('Error fetching Pokemon details:', error);
-        if (error.response && error.response.status === 404) {
-          setPokemonDetails({
-            id: 'N/A',
-            type: 'Unknown',
-            speed: 'N/A',
-            specialDefense: 'N/A',
-            specialAttack: 'N/A',
-            defense: 'N/A',
-            attack: 'N/A',
-            hp: 'N/A',
-          });
-        } else {
-          setPokemonDetails(null);
-        }
         setLoading(false);
       }
     };
@@ -60,42 +70,47 @@ const PokemonCard = ({ id, name, type }) => {
   if (loading) return 'Loading...';
 
   return (
-    <div className="bg-white rounded-md p-4 mb-4 shadow-md max-w-xs mx-auto relative" style={{ width: '230px', height: '200px' }}>
-      <div className="flex flex-col h-full justify-between">
+    <div
+      className={`rounded-md p-4 mb-4 shadow-md max-w-xs mx-auto relative overflow-hidden ${
+        pokemonDetails?.types?.[0]?.toLowerCase()
+      }`}
+      style={{
+        height: '300px',
+        width: '330px',
+        background: typeColors[pokemonDetails?.types?.[0]?.toLowerCase()] || '#BABAAE',
+      }}
+    >
+      <div className="flex flex-col h-full justify-between bg-opacity-20 bg-gray-200">
         <div>
           <div className="flex items-center justify-between mb-2">
-            {/* Display the name of the Pokemon */}
             <p className="text-lg font-bold text-blue-500">{name}</p>
-            {/* Display the ID to the right of the name */}
             <p className="text-sm text-gray-500 ml-2">#00{id}</p>
           </div>
-          {/* Display the Type of the Pokemon */}
-          <p className="text-gray-500">Type: {pokemonDetails?.type}</p>
+          <p className="text-gray-500">
+            {pokemonDetails?.types?.length > 0 ? <TypeList types={pokemonDetails.types} /> : 'Unknown'}
+          </p>
         </div>
         <div className="flex items-end justify-between">
-          {/* Move the "Show More" button to the bottom-left */}
           <button
-            className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs" // Adjusted padding and font size
+            className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs"
             onClick={handleMoreClick}
-            style={{ alignSelf: 'flex-end' }} // Align to the bottom-left
+            style={{ alignSelf: 'flex-end' }}
           >
             Show More
           </button>
-          {/* Display the Pokemon image */}
           <img
             src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails?.id}.svg`}
             alt={name}
             className="mb-2"
-            style={{ width: '80px', height: '80px' }} // Fixed size for the image
+            style={{ width: '90px', height: '110px' }}
           />
         </div>
       </div>
-      {/* Display the Pokemon Details Modal if showDetails is true */}
       {showDetails && (
         <PokemonDetailsModal
           id={pokemonDetails.id}
           name={name}
-          type={pokemonDetails.type}
+          types={pokemonDetails.types}
           speed={pokemonDetails.speed}
           specialDefense={pokemonDetails.specialDefense}
           specialAttack={pokemonDetails.specialAttack}
@@ -110,4 +125,3 @@ const PokemonCard = ({ id, name, type }) => {
 };
 
 export default PokemonCard;
-

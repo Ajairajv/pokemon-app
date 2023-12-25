@@ -1,16 +1,23 @@
-// src/components/TypeFilter.js
-import React from 'react';
+import React, { useState } from 'react';
 
 const TypeFilter = ({ types, onFilterChange }) => {
+  const [selectedType, setSelectedType] = useState('');
+
+  const handleFilterChange = (type) => {
+    setSelectedType(type);
+    onFilterChange(type);
+  };
+
   return (
-    <div className="flex flex-auto justify-between w-small">
+    <div className="flex flex-col md:flex-row justify-between w-full max-w-2xl mx-auto">
       <select
-        className="select select-primary w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-2"
+        className="select select-primary w-40 mx-2 mb-2 md:mb-0"
         id="type"
-        onChange={(e) => onFilterChange(e.target.value)}
+        onChange={(e) => handleFilterChange(e.target.value)}
+        value={selectedType}
       >
-        <option value="" disabled selected>
-          Filter by Type
+        <option value="" disabled={!selectedType} hidden={!selectedType}>
+          {selectedType ? `Filter: ${selectedType}` : 'Filter'}
         </option>
         {types.map((type) => (
           <option key={type} value={type}>

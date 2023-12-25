@@ -29,7 +29,6 @@ const getStatusWidth = (value) => {
 const PokemonDetailsModal = ({
   id,
   name,
-  type,
   types,
   speed,
   specialDefense,
@@ -53,15 +52,9 @@ const PokemonDetailsModal = ({
             />
           </div>
           <div className="flex flex-wrap gap-4">
-            {types?.map((type, index) => (
+          {types?.map((type, index) => (
               <div key={index} className="text-center">
-                <img
-                  src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${id}.svg`}
-                  alt={name}
-                  className="mx-auto mb-2"
-                  style={{ maxWidth: '80px' }}
-                />
-                <p className="text-gray-500">{type.type.name}</p>
+                <p className="text-gray-500">{type.type && type.type.name}</p>
               </div>
             ))}
           </div>
@@ -123,3 +116,6 @@ const PokemonDetailsModal = ({
 };
 
 export default PokemonDetailsModal;
+
+
+
