@@ -15,10 +15,10 @@ const typeColors = {
   bug: '#C2D21E',
   ghost: '#7975D7',
   steel: '#C4C2DB',
-  fire: '#FA5643',
+  fire: '#fc5a03',
   water: '#56ADFF',
-  grass: '#8CD750',
-  electric: '#FDE139',
+  grass: '#04c243',
+  electric: '#fac825',
   psychic: '#FA65B4',
   ice: '#96F1FF',
   dragon: '#8673FF',
@@ -67,7 +67,15 @@ const PokemonCard = ({ id, name }) => {
     setShowDetails(false);
   };
 
-  if (loading) return 'Loading...';
+  if (loading) {
+    return (
+      <button className="btn">
+        <span className="loading loading-spinner"></span>
+        Loading...
+      </button>
+    );
+  }
+  
 
   return (
     <div
@@ -83,20 +91,25 @@ const PokemonCard = ({ id, name }) => {
       <div className="flex flex-col h-full justify-between bg-opacity-20 bg-gray-200">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-lg font-bold text-blue-500">{name}</p>
-            <p className="text-sm text-gray-500 ml-2">#00{id}</p>
+            <p className="text-lg font-bold text-white">{name}</p>
+            <p className="text-2xl text-white text-opacity-70 font-calligraphy ml-2">#00{id}</p>
+
           </div>
-          <p className="text-gray-500">
-            {pokemonDetails?.types?.length > 0 ? <TypeList types={pokemonDetails.types} /> : 'Unknown'}
-          </p>
+          <div className="flex items-center">
+            {pokemonDetails?.types?.length > 0 && (
+              <div className="border-white rounded-md px-2">
+                <TypeList types={pokemonDetails.types} />
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex items-end justify-between">
           <button
-            className="bg-blue-500 text-white px-2 py-1 rounded self-start hover:bg-blue-600 transition text-xs"
+            className="border-white border bg-transperent text-white px-2 py-1 font-bold rounded self-start hover:bg-white hover:bg-opacity-20  transition text-xs"
             onClick={handleMoreClick}
             style={{ alignSelf: 'flex-end' }}
           >
-            Show More
+            See Status
           </button>
           <img
             src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${pokemonDetails?.id}.svg`}
@@ -125,3 +138,4 @@ const PokemonCard = ({ id, name }) => {
 };
 
 export default PokemonCard;
+

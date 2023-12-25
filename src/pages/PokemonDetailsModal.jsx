@@ -26,6 +26,34 @@ const getStatusWidth = (value) => {
   };
 };
 
+const StatusBar = ({ label, value }) => {
+  const statusWidth = getStatusWidth(value);
+
+  return (
+    <div className="flex flex-col items-start mb-4">
+      <p className="text-white italic">{label}</p>
+      <p className="text-white font-extrabold">{value}</p>
+      <div
+        className={`status-bar ${statusWidth.color} border-white border-2 mt-2 overflow-hidden`}
+        style={{
+          width: `${statusWidth.width}px`,
+          height: `${statusWidth.height}px`,
+          borderRadius: statusWidth.rounded,
+        }}
+      >
+        <div
+          className={`status-filled ${statusWidth.colorClass}`}
+          style={{
+            width: `${statusWidth.filledWidth}px`,
+            height: `${statusWidth.height}px`,
+            opacity: '0.8',
+          }}
+        ></div>
+      </div>
+    </div>
+  );
+};
+
 const PokemonDetailsModal = ({
   id,
   name,
@@ -39,11 +67,11 @@ const PokemonDetailsModal = ({
   handleCloseDetails,
 }) => {
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded w-[80%] flex relative z-50">
-        <div className="flex-1 mr-6">
+    <div className="fixed top-0 left-0 w-full h-full backdrop-blur-md flex items-center justify-center z-50">
+      <div className="bg-transparent border-white border-2 p-8 rounded w-[80%] flex relative z-50 backdrop-filter backdrop-blur-lg">
+        <div className="flex-1 mr-6 bg-transparent">
           <div className="mb-4">
-            <p className="text-lg font-bold text-blue-500">{name}</p>
+            <p className="text-lg font-bold text-white">{name}</p>
             <img
               src={`https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world/${id}.svg`}
               alt={name}
@@ -51,71 +79,37 @@ const PokemonDetailsModal = ({
               style={{ maxWidth: '100px' }}
             />
           </div>
-          <div className="flex flex-wrap gap-4">
-          {types?.map((type, index) => (
+          <div className="flex flex-col gap-4">
+            {types?.map((type, index) => (
               <div key={index} className="text-center">
-                <p className="text-gray-500">{type.type && type.type.name}</p>
+                <p className="text-white italic">{type.type && type.type.name}</p>
               </div>
             ))}
           </div>
         </div>
         <div className="flex-1">
           <div className="mt-6">
-            <p className="text-lg font-bold text-blue-500">Status:</p>
-            <div className="status-container grid grid-cols-2 gap-4">
-              <div className="text-gray-500">Speed:</div>
-              <div className={`status-bar ${getStatusWidth(speed).color}`} style={{ width: `${getStatusWidth(speed).width}px`, height: `${getStatusWidth(speed).height}px`, borderRadius: getStatusWidth(speed).rounded }}>
-                <div className={`status-filled ${getStatusWidth(speed).colorClass}`} style={{ width: `${getStatusWidth(speed).filledWidth}px`, height: `${getStatusWidth(speed).height}px` }}>
-                  <span className="text-black">{speed}</span>
-                </div>
-              </div>
-              <div className="text-gray-500">Special Defense:</div>
-              <div className={`status-bar ${getStatusWidth(specialDefense).color}`} style={{ width: `${getStatusWidth(specialDefense).width}px`, height: `${getStatusWidth(specialDefense).height}px`, borderRadius: getStatusWidth(specialDefense).rounded }}>
-                <div className={`status-filled ${getStatusWidth(specialDefense).colorClass}`} style={{ width: `${getStatusWidth(specialDefense).filledWidth}px`, height: `${getStatusWidth(specialDefense).height}px` }}>
-                  <span className="text-black">{specialDefense}</span>
-                </div>
-              </div>
-                <div className="text-gray-500">Special Attack:</div>
-                <div className={`status-bar ${getStatusWidth(specialAttack).color}`} style={{ width: `${getStatusWidth(specialAttack).width}px`, height: `${getStatusWidth(specialAttack).height}px`, borderRadius: getStatusWidth(specialAttack).rounded }}>
-                  <div className={`status-filled ${getStatusWidth(specialAttack).colorClass}`} style={{ width: `${getStatusWidth(specialAttack).filledWidth}px`, height: `${getStatusWidth(specialAttack).height}px` }}>
-                    <span className="text-black">{specialAttack}</span>
-                  </div>
-                </div>
-                <div className="text-gray-500">Defense:</div>
-                <div className={`status-bar ${getStatusWidth(defense).color}`} style={{ width: `${getStatusWidth(defense).width}px`, height: `${getStatusWidth(defense).height}px`, borderRadius: getStatusWidth(defense).rounded }}>
-                  <div className={`status-filled ${getStatusWidth(defense).colorClass}`} style={{ width: `${getStatusWidth(defense).filledWidth}px`, height: `${getStatusWidth(defense).height}px` }}>
-                    <span className="text-black">{defense}</span>
-                  </div>
-                </div>
-                <div className="text-gray-500">Attack:</div>
-                <div className={`status-bar ${getStatusWidth(attack).color}`} style={{ width: `${getStatusWidth(attack).width}px`, height: `${getStatusWidth(attack).height}px`, borderRadius: getStatusWidth(attack).rounded }}>
-                  <div className={`status-filled ${getStatusWidth(attack).colorClass}`} style={{ width: `${getStatusWidth(attack).filledWidth}px`, height: `${getStatusWidth(attack).height}px` }}>
-                    <span className="text-black">{attack}</span>
-                  </div>
-                </div>
-                <div className="text-gray-500">HP:</div>
-                <div className={`status-bar ${getStatusWidth(hp).color}`} style={{ width: `${getStatusWidth(hp).width}px`, height: `${getStatusWidth(hp).height}px`, borderRadius: getStatusWidth(hp).rounded }}>
-                  <div className={`status-filled ${getStatusWidth(hp).colorClass}`} style={{ width: `${getStatusWidth(hp).filledWidth}px`, height: `${getStatusWidth(hp).height}px` }}>
-                    <span className="text-black">{hp}</span>
-                  </div>
-                </div>
-
-
+            <p className="text-lg font-bold text-white mb-4">Status:</p>
+            <div className="status-container">
+              <StatusBar label="Speed" value={speed} />
+              <StatusBar label="Special Defense" value={specialDefense} />
+              <StatusBar label="Special Attack" value={specialAttack} />
+              <StatusBar label="Defense" value={defense} />
+              <StatusBar label="Attack" value={attack} />
+              <StatusBar label="HP" value={hp} />
             </div>
           </div>
         </div>
       </div>
       <button
-        className="absolute top-4 right-4 bg-blue-500 text-white px-6 py-3 rounded"
+        className="absolute top-4 right-4  text-white px-6 py-3 rounded"
         onClick={handleCloseDetails}
       >
-        Close
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
       </button>
     </div>
   );
 };
 
 export default PokemonDetailsModal;
-
-
 

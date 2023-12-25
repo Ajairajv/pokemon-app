@@ -5,8 +5,8 @@ function App() {
   return (
     <div>
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r">
-       <h1 className="text-4xl font-bold text-white mb-8">Pokemon App</h1>
-       <Home/>
+    <h1 class="text-4xl font-bold mb-8">Pokemon App</h1>
+    <Home/>
     </div>
     </div>
   );

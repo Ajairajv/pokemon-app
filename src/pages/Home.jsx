@@ -139,10 +139,10 @@ const Home = () => {
       <PokemonList pokemon={filteredPokemon} />
 
       {/* Container for Pagination buttons */}
-      <div className="flex justify-between mt-4 p-2">
-        <Pagination className="order-1" gotoPrevPage={prevPageUrl ? gotoPrevPage : null} />
-        <Pagination className="order-2" gotoNextPage={nextPageUrl ? gotoNextPage : null} />
-      </div>
+      <div className="flex  justify-between mt-4 p-4">
+      <Pagination gotoPrevPage={prevPageUrl ? gotoPrevPage : null} />
+      <Pagination gotoNextPage={nextPageUrl ? gotoNextPage : null}  />
+    </div>
     </div>
   );
 };
