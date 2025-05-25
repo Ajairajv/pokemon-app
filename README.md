@@ -6,13 +6,6 @@ A responsive and interactive Pokémon browser app built with **React** and the *
 
 ---
 
-## 🖼️ Preview
-
-![App Screenshot](https://raw.githubusercontent.com/Ajairajv/pokemon-explorer-react-app/main/preview.png)
-<!-- Replace with your actual screenshot URL if needed -->
-
----
-
 ## 🚀 Features
 
 - 🔍 Search for Pokémon by name or ID
@@ -56,4 +49,4 @@ pokemon-explorer-react-app/
 ├── package.json
 └── README.md
 
-```
+
